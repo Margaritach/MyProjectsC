@@ -3,192 +3,171 @@
 #include<conio.h>
 #include<time.h>
 void menu(void);
-void game(int a, int b, int *p, int *q);
-int testOfArr (int a, int b);
+int game(int a, int b, int *p, int *q);
+
 /*
-1 + задать массив хранящий в себе 28 фишек 
-2 + Пользователю(П) выдается 6 фишек и он ходит
-3 + Реакция пк || условия игры
+1 + задать массив хранящий в себе 28 фишек
+2 + Пользователю выдается 6 фишек и он ходит
+3 + Условия игры
+3.1 + Замена использованной фишки
 4 + Проверка можно ли так ходить
-5 //Далее ходит компьютер 
+5 //Далее ходит компьютер
 6 Прописать что делать если нужной фишки не оказалось (добавить 1 новую || пропустить ход)
-7 Когда массив кончится сообщить об этом П
+7 + Когда массив кончится сообщить об этом П
 8 Выигрывает тот у кого кончились фишки
-9 Реализовать вывод на экран 
+9 Реализовать вывод на экран
+10 Конец игры, когда кости у игрока закончились
 */
 
-int ZnKnuck[11]={0}, ZnKk[11]={0}, OstKk[35]={0};
+ struct {
+       int a; //первая сторона кости
+       int b; //вторая сторона кости
+       int c; //номер кости
+       } Knuck[28];
 
 int  main()
 { system("chcp 1251 > nul");
-
-int i=0, j=0, e=0, r=0;
+int  i=0, j=0, n=0, t=0, k=0;
 int x, y, *p, *q;
-//int ZnKnuck[11]={0}, ZnKk[11]={0}, OstKk[35]={0};
-int a, b, a1, b1;
- 
-do{
-          srand(time(NULL));
-          x=(int)rand()%7; 
-          y=(int)rand()%7;
-          } while(x==0&&y==0);
-    
-while(1)
-{ 
-    //int a, b, a1, b1; 
-   do
-	{
-        system("cls");
-        
-        if (j==6)  
-        for(i=0; i<6; ++i)
-        {
-             printf("%d. [%d|%d]\n", i+1, ZnKnuck[i], ZnKnuck[i+6]);               
-        }
-        else 
-            for(i=0; i<6; ++i)//через 1 кость может выпасть одинаковая, но вероятность маленькая
-		  	{
-				S: a = (int)rand() % 7;
-                srand(time(NULL));
-                b = (int)rand() % 7;
-                if(a==a1&&b==b1||a==b1&&b==a1)
-                  goto S;
-				printf("%d. [%d|%d]\n", i+1, a, b);
-				b1=b; a1=a;
-				ZnKnuck[i]=a;
-				ZnKnuck[i+6]=b;
-				
-                for (j=0;j<6;j++)
-                {
-                    if(ZnKk[j]==0)
-                    {
-	    		 	    S1: a = (int)rand() % 7;
-                        srand(time(NULL));
-                        b = (int)rand() % 7;
-                        if(a==a1&&b==b1||a==b1&&b==a1) 
-                           goto S1;
-			           	b1=b; a1=a;
-			            r = testOfArr (a, b);
-				        ZnKk[j]=a;
-				        ZnKk[j+6]=b;
-                    }
-                    // system("pause");
-                    for (e=0;e<16;e++)
-                    {  
-                        //while (r==0)
-                        if(OstKk[e]==0)
-                        {  S2: a = (int)rand() % 7;
-                           srand(time(NULL));
-                           b = (int)rand() % 7;
-                           if(a==a1&&b==b1||a==b1&&b==a1) goto S2;
-                           b1=b; a1=a;
-                           r = testOfArr (a, b);
-                           OstKk[e]=a;
-                           OstKk[e+16]=b;
-                        }
-                    }//fot OstKk[]*/
-                }//for ZnKk[]
-             }//for ZnKnuck[]
-             
-             //system("pause");
- 
-        //printf("7. Эпичная фразочка\n");	
-		printf("%d. %s\n", 0, "Выход");	
-		
-//for (i=0;i<6;i++) printf("ZnKnuck[%d|%d]\tZnKk[%d|%d]\n", ZnKnuck[i], ZnKnuck[i+6], ZnKk[i], ZnKk[i+6]);
-//for (i=0;i<16;i++) printf("OstKk [%d|%d]\n", OstKk[i], OstKk[i+16]); 
-  
-        p=x; q=y;
-	   	
-    	printf("\nFalling knuck [%d|%d]\n", p, q);
-		printf("\nВаш выбор: ");
-		p=&x; q=&y;
+int NumKk[7], fallKk[29]={-1};
 
-			fflush(stdin);
-     } while(scanf("%d", &r)!=1 || r<0 || r>6 );
-
-    system("cls");
-		
-		switch( r )
-		{
-		case 1: game(ZnKnuck[0],ZnKnuck[6], p, q);break;
-		case 2:	game(ZnKnuck[1],ZnKnuck[7], p, q);break;
-		case 3:	game(ZnKnuck[2],ZnKnuck[8], p, q);break;
-		case 4:	game(ZnKnuck[3],ZnKnuck[9], p, q);break;
-		case 5:	game(ZnKnuck[4],ZnKnuck[10], p, q);break;
-		case 6: game(ZnKnuck[5],ZnKnuck[11], p, q);break;
-			//case 7: printf("И да начнем!\n"); break;
-		case 0: return;
-		}
-		system("pause");	
-}//while(1)
-  
-}//main
-
-void game(int a, int b, int  *p, int *q)
-{   int k=0;
-    int x=*p, y=*q;
-    
-       if((a==x&&b==y)||(a==y&&b==x)&&k==0)//надо дать человеку выбор
-     { 
-       printf("Выбирите сторону кости:\t [%d|%d]\n", a, b);
-       scanf("%d", &x);
-       printf("Возможые следующие ходы [%d|%d]\n", y, y);  
-       k=1;     
-     } 
-      if((a==y||a==x)&&x==y&&k==0)
-     { x=b;
-       printf("Возможые следующие ходы [%d|%d]\n", x, y); 
-       k=1;       
-     } 
-      if(x==y&&(b==x||b==y)&&k==0)
-     { x=a;
-       printf("Возможые следующие ходы [%d|%d]\n", x, y); 
-       k=1;       
-     }
-      if(a==b&&(a==y||b==y)&&k==0)
-     { x=a;
-       printf("Возможые следующие ходы [%d|%d]\n", x, y); 
-       k=1;       
-     } 
-     if(a==b&&(a==y||a==x)&&k==0)
-     { 
-       printf("Возможые следующие ходы [%d|%d]\n", x, y); 
-       k=1;       
-     } 
-     
-  if(k!=1) { 
-     if(a==x&&k==0)
-     { x=b;
-       printf("Возможые след ходы [%d|%d]\n", x, y); 
-       k=2;       
-     } 
-     if(a==y&&k==0)
-     { y=b;
-       printf("Возможые след ходы [%d|%d]\n", x, y);
-       k=2;      
-     } 
-     if(b==x&&k==0)
-     { x=a; 
-       printf("Возможые след ходы [%d|%d]\n", x, y); 
-       k=2;       
-     } 
-     if(b==y&&k==0)
-     { y=a; 
-       printf("Возможые след ходы [%d|%d]\n", x, y);  
-       k=2;     
-     } 
-   } 
-     if(k==0) printf("Так ходить низя\n");
-     *p=x; *q=y;
+for (i=0;i<28;i++, j++) //задача "коллоды"
+{
+    if (j==7||(n+j>6))
+       { j=0; n++;}
+     Knuck[i].a=j;
+     Knuck[i].b=j+n;
+     printf("Knuck[%d].a = %d\tKnuck[%d].b = %d\t\n", i, Knuck[i].a, i, Knuck[i].b);
+     Knuck[i].c=i;
+     fallKk[i]=-1;
 }
 
 
-int testOfArr (int a, int b)//ловит два элемента, две стороны кости
-{ int i, j=0;
-  for (i=0;i<6;i++)  
-  { if(a==ZnKnuck[i]&&b==ZnKnuck[i+6]||b==ZnKnuck[i]&&a==ZnKnuck[i+6]) j=-1;                                                                            
-    if(a==ZnKk[i]&&b==ZnKk[i+6]||b==ZnKk[i]&&a==ZnKk[i+6]) j=-1;
-  }
-  return j;   
+
+do{ //первая случайная кость
+    srand(time(NULL));
+    x=y=(int)rand()%7;
+    //y=(int)rand()%7;
+   } while(x==0&&y==0);
+
+   //system("pause");
+
+while(1)
+{
+	do
+	{
+        system("cls");
+
+         for(i=0; i<7; ++i)
+        {
+            if (fallKk[6]==-1)
+            {
+               S: NumKk[i] = (int)rand() % 27;
+                    for (j=0;j<6;j++)
+                        if (fallKk[j]==NumKk[i]) goto S;
+               printf("%d. [%d|%d]\n", i+1, Knuck[NumKk[i]].a, Knuck[NumKk[i]].b);
+               fallKk[t]=NumKk[i];
+               t++;
+            } else if (i==k&&k<9)
+                {
+                    S1: NumKk[k] = (int)rand() % 27;
+                    for (j=0;j<28;j++)
+                        if (fallKk[j]==NumKk[k]) goto S1;
+                    //printf("Номер выпавшей кости: %d  ", NumKk[k]);
+                    fallKk[t]=NumKk[k];
+                    if (t==27)
+                    {
+                        system("cls");
+                        printf("Игра окончена\n");
+                        return 0;
+                    } else t++;
+                    printf("%d. [%d|%d]\n", k+1, Knuck[NumKk[k]].a, Knuck[NumKk[k]].b);
+                    k=10;
+                } else
+                    printf("%d. [%d|%d]\n", i+1, Knuck[NumKk[i]].a, Knuck[NumKk[i]].b);
+        }
+
+        	printf("%d. %s\n", 0, "Выход");
+
+        p=x; q=y;
+    	printf("\nFalling knuck [%d|%d]\n", p, q);
+		printf("\nВаш выбор: ");
+  	    p=&x; q=&y;
+
+			fflush(stdin);
+     } while(scanf("%d", &n)!=1 || n<0 || n>7 );
+
+    	system("cls");
+
+		switch( n )
+		{
+		case 1: k=game(Knuck[NumKk[0]].a, Knuck[NumKk[0]].b, p, q);break;
+		case 2:	k=1+game(Knuck[NumKk[1]].a, Knuck[NumKk[1]].b, p, q);break;
+		case 3:	k=2+game(Knuck[NumKk[2]].a, Knuck[NumKk[2]].b, p, q);break;
+		case 4:	k=3+game(Knuck[NumKk[3]].a, Knuck[NumKk[3]].b, p, q);break;
+		case 5:	k=4+game(Knuck[NumKk[4]].a, Knuck[NumKk[4]].b, p, q);break;
+		case 6: k=5+game(Knuck[NumKk[5]].a, Knuck[NumKk[5]].b, p, q);break;
+		case 7: k=6+game(Knuck[NumKk[6]].a, Knuck[NumKk[6]].b, p, q);break;
+		case 0: return;
+		}
+		printf("\nВыбранна %dая кость\n", k+1);
+
+		system("pause");
+  }//while(1)
+system("pause");
+}//main
+
+int game(int a, int b, int  *p, int *q)
+{   int k=10;
+    int x=*p, y=*q;
+
+      if ((a==x&&b==y)||(a==y&&b==x)&&k==10)//надо дать человеку выбор
+     {
+       printf("Выбирите сторону кости:\t [%d|%d]\n", a, b);
+       scanf("%d", &a);
+       if (a==y)
+         printf("Возможые следующие ходы [%d|%d]\n", x, x);
+       else
+         printf("Возможые следующие ходы [%d|%d]\n", y, y);
+       k=0;
+     }
+      if((a==y&&a==x)&&a!=b&&k==10)
+     { x=b;
+       printf("Возможые следующие ходы [%d|%d]\n", x, y);
+       k=0;
+     }
+      if(a!=b&&(b==x&&b==y)&&k==10)
+     { x=a;
+       printf("Возможые следующие ходы [%d|%d]\n", x, y);
+       k=0;
+     }
+     if(a==b&&(a==y||a==x)&&k==10)
+     {
+       printf("Возможые следующие ходы [%d|%d]\n", x, y);
+       k=0;
+     }
+     if(a==x&&a!=b&&k==10)
+     { x=b;
+       printf("Возможые след ходы [%d|%d]\n", x, y);
+       k=0;
+     }
+     if(a==y&&a!=b&&k==10)
+     { y=b;
+       printf("Возможые след ходы [%d|%d]\n", x, y);
+       k=0;
+     }
+     if(b==x&&a!=b&&k==10)
+     { x=a;
+       printf("Возможые след ходы [%d|%d]\n", x, y);
+       k=0;
+     }
+     if(b==y&&a!=b&&k==10)
+     { y=a;
+       printf("Возможые след ходы [%d|%d]\n", x, y);
+       k=0;
+     }
+     if(k==10) printf("Так ходить низя\n");
+     *p=x; *q=y;
+     system("pause");
+     return k;
 }
